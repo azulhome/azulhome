@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AZUL HOME - Accommodation Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            font-family: var(--font-montserrat);
+            font-size: 16px;
+        }
+        :root{
+            --main-color:#cdb083;
+            --main-color-light: #e8d7b3;
+            --main-color-dark: #8c6a2f;
+            --text-color:#2f2f2f;
+            --background-color:#f8f5f0;
+            --button-color:#a67c52;
+            --button-color-hover:#8c6a2f;
+            --font-montserrat: 'Montserrat', Arial, sans-serif;
+        }
+        .navbar{
+            background-color: var(--background-color);
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin-left: auto;
+            margin-right: auto ;
+            max-width: 77rem;
+            height: 4rem;
+        }
+        .logo{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 200px;
+        }
+        .logo-name {
+            color: var(--main-color);
+            font-size: 1.5em;
+            font-weight: bold;
+            text-decoration: none;
+            position: absolute;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .signin-btn {
+            background-color:var(--button-color) ;
+            color: white;
+            border: none;
+            padding: 15px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .signin-btn:hover {
+            background-color: var(--button-color-hover);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background-color: var(--main-color);
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        header{
+            background-image:url(https://www.mubawab-media.com/assets/desktop/public/home/main-slide10.webp);
+            background-size: cover;
+            background-position: center center;
+        }
+        .filters {
+            background-color: #8c6a2f7e;
+            padding: 45px 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-item label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--main-color-light);
+        }
+
+        .filter-item select,
+        .filter-item input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .the-title{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .property-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--main-color-dark);
+        }
+
+        .property-card:hover {
+            transform: scale(1.03);
+        }
+        .photo-mask{
+            overflow: hidden;
+            line-height: 0;
+            max-height: 360px;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 550 / 360;
+            width: 100%;
+            display: flex;
+            background-image: url(https://www.mubawab-media.com/assets/logos/mubawab.png);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #e8e9ea;
+        }
+        .property-image-container {
+            position: relative;
+        }
+
+        .property-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .property-details {
+            padding: 15px;
+        }
+
+        .property-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-left: 0.8rem;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .property-info {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .price-top-left{
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            min-height: 32px;
+        }
+
+        .property-price {
+            float: left;
+            text-align: center;
+            color: var(--main-color);
+            font-weight: bold;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 0 7px 0 8px;
+            box-sizing: border-box;
+            letter-spacing: 0.3px;
+            line-height: 1.8em;
+            margin-top: 10px;
+            margin-left: 10px;
+            background-color: var(--background-color);
+        }
+
+        .property-type {
+            background-color: var(--main-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 1rem;
+            
+        }
+
+        .no-results {
+            text-align: center;
+            background-color: white;
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+        
+        footer{
+                display: flex;
+                flex-direction: column;
+                background-color: var(--main-color);
+                padding: 3rem 1rem;
+                color: white;
+            }
+            footer h3{
+                font-size: 1.5rem;
+                line-height: 1,75rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+            footer h4{
+                font-size: 1.25rem;
+                line-height: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 1rem;
+            }
+        footer p{
+                font-weight: 200;
+            }
+            footer .content{
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                margin-left: auto;
+                margin-right: auto;
+                gap: 2rem;
+                max-width: 72rem;
+            }
+            @media(max-width:400px){
+                footer .content{
+                    grid-template-columns: repeat( 1, minmax(0, 1fr));
+                }
+            }
+            footer.creater{
+                display: flex;
+                flex-direction: column;
+            }
+            footer .contac{
+                display: flex;
+                flex-direction: column;
+            }
+            footer .em,.phon{
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            footer .location{
+                display: flex;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            footer .social{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 2rem;
+                gap: 2rem;
+            }
+            footer a svg:hover{
+                transition: all .3s ease-in-out;
+            }
+            footer a:first-child:hover{svg{fill:#4460A0;}}
+            footer a:last-child:hover{svg{fill:#ff0008;}}
+            footer a:nth-child(2) svg{path{fill:#8c6a2f;}}
+            footer a:nth-child(2) svg:hover{
+                path{fill:url(#1);}
+                .instapath{fill:url(#0);}
+            }
+            footer a:nth-child(3):hover{svg{fill:#fff;}}
+            footer a:nth-child(4):hover{svg{fill:#27B43E;}}
+            .btn{
+                background-color: var(--main-color);
+                color: white;
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 1rem;
+                transition: background-color 0.3s ease;
+            }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <img style="width: 80px; height: 60px;" src="logo-azul.png" alt="">
+                <span class="logo-name"> <span style="color:var(--main-color-dark); ">AZUL</span> HOME</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="signin-btn">Sign In</button>
+            </div>
+        </div>
+    </nav>
+    <header>
+        <div class="filters">
+            <div class="the-title">
+                <h1 style="font-size: 3rem; font-weight: 800;" ><span style="color:var(--main-color-dark);">ⴰⵣⵓⵍ</span> HOME</h1>
+                <p style="font-size: 1rem; letter-spacing: 2.5px; font-weight: 300;">Votre maison. votre confort. notre mission </p>
+            </div>
+            <div class="filter-row">
+                <div class="filter-item">
+                    <label>City</label>
+                    <select id="cityFilter">
+                        <option value="">All Cities</option>
+                        <option value="Rabat">Rabat</option>
+                        <option value="Marrakech">Marrakech</option>
+                        <option value="Casablanca">Casablanca</option>
+                        <option value="Tangier">Tangier</option>
+                        <option value="Fes">Fes</option>
+                        <option value="Khenifra">Khenifra</option>
+                        <option value="Agadir">Agadir</option>
+                        <option value="Tetouan">Tetouan</option>
+                        <option value="Oujda">Oujda</option>
+                        <option value="Kenitra">Kenitra</option>
+                        <option value="Meknes">Meknes</option>
+                        <option value="Sale">Sale</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Partners</label>
+                    <select id="partnerFilter">
+                        <option value="">All Partners</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="4+">4+</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Property Type</label>
+                    <select id="propertyTypeFilter">
+                        <option value="">All Types</option>
+                        <option value="Apartment">Apartment</option>
+                        <option value="House">House</option>
+                        <option value="Room">Room</option>
+                    </select>
+                </div>
+
+                <div class="filter-item">
+                    <label>User Type</label>
+                    <select id="userTypeFilter">
+                        <option value="">All Users</option>
+                        <option value="Student">Student</option>
+                        <option value="Tourist">Tourist</option>
+                        <option value="family">Family</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-item">
+                <label>Price Range</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="minPrice" placeholder="Min Price (DH)" min="4" max="10000000">
+                    <input type="number" id="maxPrice" placeholder="Max Price (DH)" min="4" max="10000000">
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div id="resultsContainer" class="results"></div>
+    </div>
+    <footer>
+        <div id="contact" class="content">
+            <div class="creater">
+                <h3>RedKen</h3>
+                <p>Creating distinctive fragrances for discerning clients worldwide.</p>
+            </div>
+            <div class="contac">
+                <h4>Contact</h4>
+                <div>
+                    <div class="em">
+                        <svg fill="#8c6a2f" width="24px" height="24px" viewBox="0 0 100.354 100.354" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="#8c6a2f"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M93.09,76.224c0.047-0.145,0.079-0.298,0.079-0.459V22.638c0-0.162-0.032-0.316-0.08-0.462 c-0.007-0.02-0.011-0.04-0.019-0.06c-0.064-0.171-0.158-0.325-0.276-0.46c-0.008-0.009-0.009-0.02-0.017-0.029 c-0.005-0.005-0.011-0.007-0.016-0.012c-0.126-0.134-0.275-0.242-0.442-0.323c-0.013-0.006-0.023-0.014-0.036-0.02 c-0.158-0.071-0.33-0.111-0.511-0.123c-0.018-0.001-0.035-0.005-0.053-0.005c-0.017-0.001-0.032-0.005-0.049-0.005H8.465 c-0.017,0-0.033,0.004-0.05,0.005c-0.016,0.001-0.032,0.004-0.048,0.005c-0.183,0.012-0.358,0.053-0.518,0.125 c-0.01,0.004-0.018,0.011-0.028,0.015c-0.17,0.081-0.321,0.191-0.448,0.327c-0.005,0.005-0.011,0.006-0.016,0.011 c-0.008,0.008-0.009,0.019-0.017,0.028c-0.118,0.135-0.213,0.29-0.277,0.461c-0.008,0.02-0.012,0.04-0.019,0.061 c-0.048,0.146-0.08,0.3-0.08,0.462v53.128c0,0.164,0.033,0.32,0.082,0.468c0.007,0.02,0.011,0.039,0.018,0.059 c0.065,0.172,0.161,0.327,0.28,0.462c0.007,0.008,0.009,0.018,0.016,0.026c0.006,0.007,0.014,0.011,0.021,0.018 c0.049,0.051,0.103,0.096,0.159,0.14c0.025,0.019,0.047,0.042,0.073,0.06c0.066,0.046,0.137,0.083,0.21,0.117 c0.018,0.008,0.034,0.021,0.052,0.028c0.181,0.077,0.38,0.121,0.589,0.121h83.204c0.209,0,0.408-0.043,0.589-0.121 c0.028-0.012,0.054-0.03,0.081-0.044c0.062-0.031,0.124-0.063,0.181-0.102c0.03-0.021,0.057-0.048,0.086-0.071 c0.051-0.041,0.101-0.082,0.145-0.129c0.008-0.008,0.017-0.014,0.025-0.022c0.008-0.009,0.01-0.021,0.018-0.03 c0.117-0.134,0.211-0.288,0.275-0.458C93.078,76.267,93.083,76.246,93.09,76.224z M9.965,26.04l25.247,23.061L9.965,72.346V26.04z M61.711,47.971c-0.104,0.068-0.214,0.125-0.301,0.221c-0.033,0.036-0.044,0.083-0.073,0.121l-11.27,10.294L12.331,24.138h75.472 L61.711,47.971z M37.436,51.132l11.619,10.613c0.287,0.262,0.649,0.393,1.012,0.393s0.725-0.131,1.011-0.393l11.475-10.481 l25.243,23.002H12.309L37.436,51.132z M64.778,49.232L90.169,26.04v46.33L64.778,49.232z"></path></g></svg>
+                        <p>redken@gmail.com</p>
+                    </div>
+                    <div class="phon">
+                        <svg version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" width="24px" height="24px" fill="#8c6a2f" stroke="#8c6a2f"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:none;stroke:#8c6a2f;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:10;} .st1{fill:none;stroke:#8c6a2f;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;} .st2{fill:none;stroke:#8c6a2f;stroke-width:2;stroke-miterlimit:10;} </style> <path class="st0" d="M18.9,18.2c-0.5,0.5-0.9,1.1-1.3,1.8c-2-1.7-3.9-3.5-5.6-5.6c0.7-0.3,1.3-0.8,1.8-1.3c2.3-2.3,1.5-5.3-0.8-7.6 S7.7,2.3,5.4,4.6s-2.7,6.6-0.8,9.3C7.9,19,13,24.1,18.1,27.5c2.7,1.8,7,1.5,9.3-0.8s1.5-5.3-0.8-7.6S21.3,15.8,18.9,18.2z"></path> </g></svg>
+                        <p>+212 632-879709</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4>location</h4>
+                <div class="location">
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="-0.87 -0.87 30.74 30.74" enable-background="new 0 0 29 32" xml:space="preserve" fill="#8c6a2f" stroke="#8c6a2f" transform="rotate(0)matrix(-1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.057999999999999996"></g><g id="SVGRepo_iconCarrier"> <g> <path fill="#808184" d="M1.045,27.731l13.303,4.245C14.397,31.992,14.449,32,14.5,32c0.053,0,0.106-0.009,0.157-0.025l13.312-4.407 C28.595,27.36,29,26.803,29,26.145s-0.404-1.218-1.03-1.425l-7.733-2.56c-0.264-0.09-0.545,0.056-0.632,0.317 c-0.087,0.263,0.055,0.545,0.317,0.632l7.733,2.56C27.975,25.775,28,26.06,28,26.145c0,0.084-0.025,0.368-0.344,0.474 l-13.159,4.356L1.35,26.778C1.029,26.676,1.001,26.392,1,26.307c-0.001-0.084,0.021-0.368,0.339-0.478l8.028-2.753 c0.261-0.089,0.4-0.374,0.311-0.635c-0.09-0.262-0.375-0.401-0.635-0.311l-8.028,2.753C0.392,25.097-0.007,25.659,0,26.317 S0.417,27.53,1.045,27.731z"></path> <path fill="#808184" d="M15.679,0.063C9.81-0.595,4.817,3.982,4.817,9.705c0,2.24,0.729,4.23,2.355,6.442l6.31,9.121 c0.249,0.359,0.658,0.574,1.096,0.574h0c0.441,0,0.853-0.218,1.098-0.577l4.173-5.993l2.344-3.568 c1.655-2.094,2.361-4.718,1.988-7.388C23.581,4.022,20.005,0.551,15.679,0.063z M21.382,15.12l-2.362,3.592l-4.168,5.986 c-0.089,0.13-0.222,0.145-0.274,0.145s-0.185-0.014-0.274-0.143l-6.318-9.133c-1.5-2.041-2.169-3.85-2.169-5.862 C5.817,4.905,9.734,1,14.548,1c0.335,0,0.675,0.019,1.018,0.058c3.88,0.437,7.086,3.548,7.624,7.397 C23.525,10.852,22.892,13.206,21.382,15.12z"></path> <path fill="#808184" d="M14.497,4.705c-2.757,0-5,2.243-5,5s2.243,5,5,5s5-2.243,5-5S17.253,4.705,14.497,4.705z M14.497,13.705 c-2.206,0-4-1.794-4-4s1.794-4,4-4s4,1.794,4,4S16.702,13.705,14.497,13.705z"></path> </g> </g></svg>
+                    <p>243 Rose Streat Khenifra,
+                        <br> KH 54000</p>
+                </div>
+            </div>
+        </div>
+        <div class="social">
+            <a href="https://www.facebook.com/" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8c6a2f" class="bi bi-facebook" viewBox="0 0 16 16"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg>
+            </a>
+            <a href="https://www.instagram.com/" target="_blank">
+                <svg width="25px" height="25px" viewBox="0 0 2500 2500" xmlns="http://www.w3.org/2000/svg" fill="#8c6a2f"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><radialGradient id="0" cx="332.14" cy="2511.81" r="3263.54" gradientUnits="userSpaceOnUse"><stop offset=".09" stop-color="#fa8f21"></stop><stop offset=".78" stop-color="#d82d7e"></stop></radialGradient><radialGradient id="1" cx="1516.14" cy="2623.81" r="2572.12" gradientUnits="userSpaceOnUse"><stop offset=".64" stop-color="#8c3aaa" stop-opacity="0"></stop><stop offset="1" stop-color="#8c3aaa"></stop></radialGradient></defs><path class="instapath" d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#0)"></path><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#1)"></path></g></svg>
+            </a>
+            <a href="https://www.twitter-x.com/" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8c6a2f" class="bi bi-twitter-x" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/></svg>
+            </a>
+            <a href="https://www.whatsapp.com/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8c6a2f" class="bi bi-whatsapp" viewBox="0 0 16 16"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg>
+            </a>
+            <a href="https://www.youtube.com/" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#8c6a2f" class="bi bi-youtube" viewBox="0 0 16 16"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/></svg>
+            </a>
+        </div>
+    </footer>
+    <script>
+        // Accommodation data with images (using Moroccan locations)
+        const accommodations = [
+            {
+                id: 1,
+                title: "Modern Apartment in Rabat",
+                type: "Apartment",
+                price: 3500,
+                location: "Hassan, Rabat",
+                userType: "family",
+                Partners: 0,
+                image: "https://www.mubawab-media.com/promotion/3/161F/pictures/h/IMG_3461_6168473.avif"
+            },
+            {
+                id: 2,
+                title: "Cozy House in Marrakech",
+                type: "House",
+                price: 5000,
+                location: "Medina, Marrakech",
+                userType: "Tourist",
+                Partners: 0,
+                image:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+            },
+            {
+                id: 3,
+                title: "Student Room in Casablanca",
+                type: "Room",
+                price: 2000,
+                location: "Ain Diab, Casablanca",
+                userType: "Student",
+                Partners: 2,
+                image: "https://www.mubawab-media.com/ad/7/974/156F/h/AP-03F_78602616_78602688.avif"
+            },
+            {
+                id: 4,
+                title: "Professional Apartment in Tangier",
+                type: "Apartment",
+                price: 4200,
+                location: "Ville Nouvelle, Tangier",
+                userType: "family, tourist",
+                Partners: 0,
+                image: "https://www.mubawab-media.com/ad/7/237/880F/h/_P3A0309-HDR_26689075.avif"
+            
+            },
+            {
+            id: 5,
+                title: "Crazy Room in Zitoun for students only ",
+                type: "Room",
+                price: 1200,
+                location: "Zitoun, Meknes",
+                userType: "Student",
+                Partners: 3,
+                image:"https://www.mubawab-media.com/ad/8/064/821F/h/photo_0_79577875.avif"
+            },
+            {
+                id: 6,
+                title: "House in Meknes",
+                type: "House",
+                price: 3000,
+                location: "Hamria, Meknes",
+                userType: "Tourist, student, family",
+                Partners: 0,
+                image:"https://www.mubawab-media.com/ad/8/105/716F/h/photo_0_79901961.avif"
+            
+            },
+            { 
+                id: 7,
+                title: "apartment in Meknes",
+                type: "Apartment",
+                price: 3500,
+                location: "Hamria, Meknes",
+                userType: "Tourist",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/8/105/921F/h/photo_0_79903975.avif"
+            }, 
+            {
+            id: 8,
+                title: "Kasbah red castle Hotel",
+                type: "House",
+                price: 4800,
+                location: "Kasbah, Marrakech",
+                userType: "family",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/8/113/055F/h/IMG_8242_79974965.avif"
+            },
+            { 
+            id: 9,
+                title: "red House in Meknes",
+                type: "House",
+                price: 5000,
+                location: "El Menzeh, Meknes",
+                userType: "tourist, family",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/8/093/024F/h/1000051715_79779223.avif"
+            },
+            { 
+            id: 10,
+                title: "House in Khenifra",
+                type: "House",
+                price: 2500,
+                location: "Amalou, Khenifra",
+                userType: "Tourist",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/8/074/641F/h/photo_0_79600865.avif"
+            },
+            { 
+            id: 11,
+                title: "Royal Mansour House in Marrakech",
+                type: "House",
+                price: 4999,
+                location: "Medina, Marrakech",
+                userType: "Tourist",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/7/906/275F/h/01-CAM-DAY_74352198_74352222.avif"
+            },
+            { 
+            id: 12,
+                title: "Apartment in Khenifra",
+                type: "Apartment",
+                price: 3400,
+                location: "El Masira, Khenifra",
+                userType: "Family",
+                Partners: 0,
+                image:"	https://www.mubawab-media.com/ad/7/115/909F/h/Dyour-Al-masjid-03052022_205314_21508372.avif"
+            },
+        ];
+
+        // DOM Elements 
+        const propertyTypeFilter = document.getElementById('propertyTypeFilter');
+        const partnersFilter = document.getElementById('partnerFilter');
+        const cityFilter = document.getElementById('cityFilter');
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        const userTypeFilter = document.getElementById('userTypeFilter');
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        // Render accommodations
+        function renderAccommodations(filteredAccommodations) {
+            resultsContainer.innerHTML = '';
+
+            if (filteredAccommodations.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        <h2>No accommodations found</h2>
+                        <p>Try adjusting your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredAccommodations.forEach(accommodation => {
+                const propertyCard = document.createElement('div');
+                propertyCard.classList.add('property-card');
+                propertyCard.innerHTML = `
+                    <div class="property-image-container">
+                        <div class="price-top-left"><span class="property-price">${accommodation.price}DH /mth</span></div>
+                        <div class="photo-mask"><img src="${accommodation.image}" alt="${accommodation.title}" class="property-image"></div>
+                        
+                    </div>
+                    
+                    <div class="property-details">
+                        <div class="property-info">
+                            <span class="property-type">${accommodation.type}</span>
+                            <div class="property-title">${accommodation.title}</div>
+                        </div>
+                        <div style="color:var(--main-color-dark); display:flex; align-item: center;">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#8c6a2f"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 21C15.5 17.4 19 14.1764 19 10.2C19 6.22355 15.866 3 12 3C8.13401 3 5 6.22355 5 10.2C5 14.1764 8.5 17.4 12 21Z" stroke="#8c6a2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 12C13.1046 12 14 11.1046 14 10C14 8.89543 13.1046 8 12 8C10.8954 8 10 8.89543 10 10C10 11.1046 10.8954 12 12 12Z" stroke="#8c6a2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                            <span style="margin-left:0.25rem">${accommodation.location}</span>
+                            </div>
+                        <div>Suitable for: ${accommodation.userType}</div>
+                        <div>Partners: ${accommodation.Partners}</div>
+                        <button class="btn" onclick="window.location.href='discription.html'">View Details</button>
+                    </div>
+                `;
+                resultsContainer.appendChild(propertyCard);
+            });
+        }
+
+        // Filter accommodations
+        function filterAccommodations() {
+            const propertyType = propertyTypeFilter.value;
+            const minPrice = minPriceInput.value ? parseInt(minPriceInput.value) : 0;
+            const maxPrice = maxPriceInput.value ? parseInt(maxPriceInput.value) : Infinity;
+            const userType = userTypeFilter.value;
+            const city = cityFilter.value; // Get selected city
+            const partners = partnersFilter.value; // Get selected partners
+
+            const filteredAccommodations = accommodations.filter(accommodation => {
+                const matchesPropertyType = 
+                    !propertyType || accommodation.type === propertyType;
+                
+                const matchesPrice = 
+                    accommodation.price >= minPrice && 
+                    accommodation.price <= maxPrice;
+                
+                const userTypes = accommodation.userType ? accommodation.userType.toLowerCase().split(',').map(type => type.trim()) : [];
+                const matchesUserType = !userType || userTypes.includes(userType);
+
+                const matchesCity =
+                    !city || accommodation.location.includes(city);
+
+                const matchesPartners = 
+                !partners ||(partners === "+4" ? accommodation.Partners > 4 : accommodation.Partners.toString() === partners);
+
+                return matchesPropertyType && matchesPrice && matchesUserType && matchesCity && matchesPartners;
+            });
+
+            renderAccommodations(filteredAccommodations);
+        }
+
+        // Event Listeners
+
+        propertyTypeFilter.addEventListener('change', filterAccommodations);
+        minPriceInput.addEventListener('input', filterAccommodations);
+        maxPriceInput.addEventListener('input', filterAccommodations);
+        userTypeFilter.addEventListener('change', filterAccommodations);
+        cityFilter.addEventListener('change', filterAccommodations); // Added city filter listener
+        partnersFilter.addEventListener('change', filterAccommodations); // Added partners filter listener
+        // Initial render
+        renderAccommodations(accommodations);
+
+    </script>
+</body>
+</html>
